@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asset Vault</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #0b1a2d;
+  color: white;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: #07101f;
+}
+
+header img {
+  height: 50px;
+}
+
+h1 {
+  margin: 0;
+  color: gold;
+}
+
+.tagline {
+  text-align: center;
+  margin-top: -10px;
+  color: #ccc;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: #11243d;
+  padding: 25px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: gold;
+  color: black;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  width: 100%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #d4af37;
+}
+
+#status {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 30px;
+  color: #aaa;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="logo.png" alt="Asset Vault Logo">
+  <h1>Asset Vault</h1>
+</header>
+
+<p class="tagline">Unlocking Hidden Wealth Through Intelligence</p>
+
+<div class="container">
+
+<div class="card">
+<h2>Check for Unclaimed Funds</h2>
+
+<form id="fundForm">
+
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="text" id="address" placeholder="Physical Address" required>
+<input type="email" id="email" placeholder="Email Address" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<input type="text" id="country" placeholder="Country" required>
+
+<textarea id="notes" placeholder="Additional Info (Optional)"></textarea>
+
+<button type="submit">Check Records</button>
+
+</form>
+
+<div id="status"></div>
+
+</div>
+
+<div class="footer">
+  Asset Vault BI is a product of First Block Solutions (PTY) LTD.  
+  We are not a law firm and do not provide legal advice.  
+  Services are offered on a success-based commission.
+</div>
+
+</div>
+
+<script>
+
+emailjs.init("YOUR_PUBLIC_KEY");
+
+document.getElementById("fundForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+
+  document.getElementById("status").innerHTML = "🔍 Checking global records...";
+
+  const found = Math.random() > 0.5;
+
+  setTimeout(() => {
+
+    if(found){
+      document.getElementById("status").innerHTML = 
+      "✅ Potential match found! Our compliance team will contact you.";
+
+    } else {
+      document.getElementById("status").innerHTML = 
+      "❌ No immediate match found. We will keep monitoring.";
+    }
+
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+      client_name: name,
+      client_email: email,
+      message: "New submission received"
+    });
+
+  }, 2000);
+});
+</script>
+
+</body>
+</html>
