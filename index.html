@@ -16,8 +16,8 @@
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  background: #ffffff; /* White main background */
-  color: #0b1a2d; /* Navy blue text */
+  background: #ffffff; /* White background */
+  color: #0b1a2d; /* Navy text */
 }
 
 a {
@@ -30,9 +30,9 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #0b1a2d; /* Navy header */
+  background: #FFD700; /* Bright gold header */
   padding: 15px 30px;
-  color: gold;
+  color: #0b1a2d;
 }
 
 header img {
@@ -46,15 +46,15 @@ nav {
 }
 
 nav a {
-  color: gold;
+  color: #0b1a2d;
   font-weight: 600;
   padding: 5px 10px;
   transition: all 0.3s;
 }
 
 nav a:hover {
-  background: gold;
-  color: #0b1a2d;
+  background: #0b1a2d;
+  color: #FFD700;
   border-radius: 5px;
 }
 
@@ -67,7 +67,7 @@ nav a:hover {
 
 /* Card */
 .card {
-  background: #f9f9f9; /* Slightly grayish white for form card */
+  background: #f9f9f9; /* Light card */
   padding: 25px;
   border-radius: 10px;
   margin-top: 20px;
@@ -85,15 +85,16 @@ input, textarea, select, button {
 }
 
 button {
-  background: gold;
-  color: #0b1a2d;
+  background: #0b1a2d; /* Navy blue buttons */
+  color: gold;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 button:hover {
-  background: #d4af37;
+  background: gold;
+  color: #0b1a2d;
 }
 
 /* Status */
@@ -119,6 +120,25 @@ footer {
 .section.active {
   display: block;
 }
+
+/* Numbered icons list */
+.icon-list {
+  list-style: none;
+  padding-left: 0;
+}
+.icon-list li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+}
+.icon-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #FFD700; /* Gold bullets */
+  font-weight: bold;
+  font-size: 20px;
+}
 </style>
 </head>
 
@@ -140,10 +160,28 @@ footer {
 <div class="container section active" id="home">
   <h1>Welcome to Asset Vault BI</h1>
   <p>
-    Asset Vault BI is a global platform designed to help individuals and organizations recover unclaimed funds from around the world. 
-    Using advanced data intelligence, PDF extraction, and API integration, we identify potential unclaimed assets, notify our compliance team, 
-    and assist clients with filing claims. Our platform also allows our company to filter prospects and maximize recovery opportunities, earning 
-    a commission only upon successful payment.
+    Asset Vault BI is a global platform dedicated to helping individuals and organizations identify, verify, and recover unclaimed funds from around the world. These funds may include dormant bank accounts, uncashed checks, insurance payouts, pensions, dividends, tax refunds, and other financial assets that have gone uncollected over time.
+  </p>
+  <p>
+    Our team specializes in conducting comprehensive searches across multiple jurisdictions, leveraging global financial databases, public registries, and institutional records to trace assets that rightfully belong to you. We work closely with financial institutions, regulatory bodies, and government-held asset registries to ensure accurate identification and recovery.
+  </p>
+  <p>Asset recovery agents like Asset Vault BI play a critical role in:</p>
+  <ul class="icon-list">
+    <li>Investigating dormant and lost financial records</li>
+    <li>Matching individuals or businesses to rightful assets</li>
+    <li>Assisting with legal documentation and verification</li>
+    <li>Facilitating claims across different countries and legal systems</li>
+    <li>Providing continuous monitoring for newly identified assets</li>
+  </ul>
+  <p>
+    With a strong focus on confidentiality, compliance, and transparency, Asset Vault BI simplifies what is often a complex and time-consuming process, giving clients confidence and peace of mind.
+  </p>
+  <h3>Global Market Insight</h3>
+  <p>
+    The global unclaimed funds landscape is vast and continuously growing. Industry estimates suggest there are over 300 million unclaimed assets worldwide valued at more than $200 billion, with significant amounts held by governments and financial institutions across major economies.
+  </p>
+  <p>
+    This represents a massive pool of dormant wealth waiting to be reunited with its rightful owners, highlighting the importance of reliable recovery platforms like Asset Vault BI.
   </p>
   <p>
     Start your journey today by navigating to the <strong>Search & Claim</strong> page to see if you have unclaimed funds.
@@ -154,12 +192,6 @@ footer {
 <div class="container section" id="search">
   <div class="card">
     <h2>Check for Unclaimed Funds</h2>
-
-    <!-- PDF Upload -->
-    <h3>Upload Data Source (PDF)</h3>
-    <input type="file" id="pdfUpload" accept="application/pdf">
-    <button onclick="processPDF()">Process PDF</button>
-    <pre id="pdfOutput"></pre>
 
     <form id="fundForm">
       <input type="text" id="name" placeholder="Full Name" required>
@@ -178,9 +210,9 @@ footer {
 <!-- Contacts Section -->
 <div class="container section" id="contacts">
   <h2>Contact Us</h2>
+  <p>Address: Maseru, 0100, Lesotho</p>
+  <p>Phone: +266 62722040</p>
   <p>Email: <strong>compliance@assetvaultbi.com</strong></p>
-  <p>Phone: +264 123 4567</p>
-  <p>Address: First Block Solutions Pty Ltd, Lesotho</p>
 </div>
 
 <!-- Footer -->
@@ -189,7 +221,6 @@ footer {
 </footer>
 
 <!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script>
 emailjs.init("YOUR_PUBLIC_KEY");
 
@@ -198,33 +229,6 @@ function showSection(sectionId){
   const sections = document.querySelectorAll('.section');
   sections.forEach(sec => sec.classList.remove('active'));
   document.getElementById(sectionId).classList.add('active');
-}
-
-// PDF Processing
-let extractedData = "";
-
-async function processPDF() {
-  const file = document.getElementById("pdfUpload").files[0];
-  if(!file){ alert("Please upload a PDF."); return; }
-
-  const reader = new FileReader();
-  reader.onload = async function() {
-    const typedarray = new Uint8Array(this.result);
-    const pdf = await pdfjsLib.getDocument(typedarray).promise;
-    let fullText = "";
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-      let page = await pdf.getPage(i);
-      let content = await page.getTextContent();
-      let strings = content.items.map(item => item.str);
-      fullText += strings.join(" ") + "\n";
-    }
-
-    extractedData = fullText;
-    document.getElementById("pdfOutput").textContent = "PDF processed successfully!";
-  };
-
-  reader.readAsArrayBuffer(file);
 }
 
 // Form Submission
@@ -239,8 +243,8 @@ document.getElementById("fundForm").addEventListener("submit", function(e){
 
   document.getElementById("status").innerHTML = "🔍 Checking global records...";
 
-  // Replace this with actual PDF/API search later
-  const found = extractedData.toLowerCase().includes(name.toLowerCase()) || Math.random() > 0.5;
+  // Simulated search logic
+  const found = Math.random() > 0.5;
 
   setTimeout(() => {
     if(found){
