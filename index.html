@@ -3,162 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asset Vault</title>
+<title>Asset Vault BI</title>
 
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
 
 <style>
+/* Global Styles */
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  background: #0b1a2d;
-  color: white;
+  background: #ffffff; /* White main background */
+  color: #0b1a2d; /* Navy blue text */
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Header */
 header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 20px;
-  background: #07101f;
-}
-
-header img {
-  height: 50px;
-}
-
-h1 {
-  margin: 0;
+  justify-content: space-between;
+  background: #0b1a2d; /* Navy header */
+  padding: 15px 30px;
   color: gold;
 }
 
-.tagline {
-  text-align: center;
-  margin-top: -10px;
-  color: #ccc;
+header img {
+  height: 200px; /* 4x size */
+  margin-right: 20px;
 }
 
+nav {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  color: gold;
+  font-weight: 600;
+  padding: 5px 10px;
+  transition: all 0.3s;
+}
+
+nav a:hover {
+  background: gold;
+  color: #0b1a2d;
+  border-radius: 5px;
+}
+
+/* Container */
 .container {
   max-width: 900px;
-  margin: auto;
+  margin: 40px auto;
   padding: 20px;
 }
 
+/* Card */
 .card {
-  background: #11243d;
+  background: #f9f9f9; /* Slightly grayish white for form card */
   padding: 25px;
   border-radius: 10px;
   margin-top: 20px;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
 }
 
-input, textarea {
+/* Inputs */
+input, textarea, select, button {
   width: 100%;
   padding: 12px;
   margin-top: 10px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #0b1a2d;
+  font-size: 14px;
 }
 
 button {
   background: gold;
-  color: black;
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  width: 100%;
+  color: #0b1a2d;
   font-weight: bold;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
 button:hover {
   background: #d4af37;
 }
 
+/* Status */
 #status {
   margin-top: 15px;
   font-weight: bold;
 }
 
-.footer {
+/* Footer */
+footer {
   text-align: center;
   font-size: 12px;
-  margin-top: 30px;
-  color: #aaa;
+  padding: 20px;
+  background: #0b1a2d;
+  color: gold;
+  margin-top: 50px;
+}
+
+/* Hidden Sections */
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Header -->
 <header>
-  <img src="logo.png" alt="Asset Vault Logo">
-  <h1>Asset Vault</h1>
+  <div style="display:flex; align-items:center;">
+    <img src="logo.png" alt="Asset Vault Logo">
+  </div>
+  <nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('search')">Search & Claim</a>
+    <a href="#" onclick="showSection('contacts')">Contacts</a>
+  </nav>
 </header>
 
-<p class="tagline">Unlocking Hidden Wealth Through Intelligence</p>
-
-<div class="container">
-
-<div class="card">
-<h2>Check for Unclaimed Funds</h2>
-
-<form id="fundForm">
-
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="text" id="address" placeholder="Physical Address" required>
-<input type="email" id="email" placeholder="Email Address" required>
-<input type="tel" id="phone" placeholder="Phone Number" required>
-<input type="text" id="country" placeholder="Country" required>
-
-<textarea id="notes" placeholder="Additional Info (Optional)"></textarea>
-
-<button type="submit">Check Records</button>
-
-</form>
-
-<div id="status"></div>
-
+<!-- Home Section -->
+<div class="container section active" id="home">
+  <h1>Welcome to Asset Vault BI</h1>
+  <p>
+    Asset Vault BI is a global platform designed to help individuals and organizations recover unclaimed funds from around the world. 
+    Using advanced data intelligence, PDF extraction, and API integration, we identify potential unclaimed assets, notify our compliance team, 
+    and assist clients with filing claims. Our platform also allows our company to filter prospects and maximize recovery opportunities, earning 
+    a commission only upon successful payment.
+  </p>
+  <p>
+    Start your journey today by navigating to the <strong>Search & Claim</strong> page to see if you have unclaimed funds.
+  </p>
 </div>
 
-<div class="footer">
-  Asset Vault BI is a product of First Block Solutions (PTY) LTD.  
-  We are not a law firm and do not provide legal advice.  
-  Services are offered on a success-based commission.
+<!-- Search & Claim Section -->
+<div class="container section" id="search">
+  <div class="card">
+    <h2>Check for Unclaimed Funds</h2>
+
+    <!-- PDF Upload -->
+    <h3>Upload Data Source (PDF)</h3>
+    <input type="file" id="pdfUpload" accept="application/pdf">
+    <button onclick="processPDF()">Process PDF</button>
+    <pre id="pdfOutput"></pre>
+
+    <form id="fundForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="text" id="address" placeholder="Physical Address" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="text" id="country" placeholder="Country" required>
+      <textarea id="notes" placeholder="Additional Info (Optional)"></textarea>
+      <button type="submit">Check Records</button>
+    </form>
+
+    <div id="status"></div>
+  </div>
 </div>
 
+<!-- Contacts Section -->
+<div class="container section" id="contacts">
+  <h2>Contact Us</h2>
+  <p>Email: <strong>compliance@assetvaultbi.com</strong></p>
+  <p>Phone: +264 123 4567</p>
+  <p>Address: First Block Solutions Pty Ltd, Lesotho</p>
 </div>
 
+<!-- Footer -->
+<footer>
+  © 2026 First Block Solutions Pty Ltd. All Rights Reserved | Unclaimed Funds Search Portal
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script>
-
 emailjs.init("YOUR_PUBLIC_KEY");
 
+// Navigation Function
+function showSection(sectionId){
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(sec => sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+}
+
+// PDF Processing
+let extractedData = "";
+
+async function processPDF() {
+  const file = document.getElementById("pdfUpload").files[0];
+  if(!file){ alert("Please upload a PDF."); return; }
+
+  const reader = new FileReader();
+  reader.onload = async function() {
+    const typedarray = new Uint8Array(this.result);
+    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+    let fullText = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      let page = await pdf.getPage(i);
+      let content = await page.getTextContent();
+      let strings = content.items.map(item => item.str);
+      fullText += strings.join(" ") + "\n";
+    }
+
+    extractedData = fullText;
+    document.getElementById("pdfOutput").textContent = "PDF processed successfully!";
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+// Form Submission
 document.getElementById("fundForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
+  const address = document.getElementById("address").value;
+  const phone = document.getElementById("phone").value;
+  const country = document.getElementById("country").value;
 
   document.getElementById("status").innerHTML = "🔍 Checking global records...";
 
-  const found = Math.random() > 0.5;
+  // Replace this with actual PDF/API search later
+  const found = extractedData.toLowerCase().includes(name.toLowerCase()) || Math.random() > 0.5;
 
   setTimeout(() => {
-
     if(found){
-      document.getElementById("status").innerHTML = 
-      "✅ Potential match found! Our compliance team will contact you.";
-
+      document.getElementById("status").innerHTML = "✅ Potential match found! Our compliance team will contact you.";
     } else {
-      document.getElementById("status").innerHTML = 
-      "❌ No immediate match found. We will keep monitoring.";
+      document.getElementById("status").innerHTML = "❌ No immediate match found. We will keep monitoring.";
     }
 
+    // Send notification to compliance
     emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
       client_name: name,
       client_email: email,
-      message: "New submission received"
+      client_phone: phone,
+      client_address: address,
+      client_country: country,
+      message: found ? "Potential unclaimed funds match found." : "No match yet - lead stored."
     });
 
   }, 2000);
