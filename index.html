@@ -44,11 +44,12 @@ nav a {
   color: #0b1a2d;
   font-weight: 600;
   padding: 6px 10px;
+  cursor: pointer;
 }
 
 nav a:hover {
   background: #0b1a2d;
-  color: #6b3e26; /* brown */
+  color: #c89b6d; /* light brown */
   border-radius: 5px;
 }
 
@@ -103,13 +104,13 @@ input, textarea, button {
 
 button {
   background: #0b1a2d;
-  color: #6b3e26;
+  color: #c89b6d;
   font-weight: bold;
   cursor: pointer;
 }
 
 button:hover {
-  background: #6b3e26;
+  background: #c89b6d;
   color: #fff;
 }
 
@@ -127,7 +128,7 @@ button:hover {
   content: "•";
   position: absolute;
   left: 0;
-  color: #6b3e26;
+  color: #c89b6d;
   font-size: 18px;
 }
 
@@ -140,7 +141,7 @@ footer {
   text-align: center;
   padding: 15px;
   background: #0b1a2d;
-  color: #6b3e26;
+  color: #c89b6d;
 }
 </style>
 </head>
@@ -151,11 +152,11 @@ footer {
   <img src="logo.png" onclick="showSection('home')">
   <div class="menu-toggle" onclick="toggleMenu()">☰</div>
   <nav id="navMenu">
-    <a onclick="showSection('home')">Home</a>
-    <a onclick="showSection('search')">Search & Claim</a>
-    <a onclick="showSection('training')">Training</a>
-    <a onclick="showSection('careers')">Careers</a>
-    <a onclick="showSection('contacts')">Contacts</a>
+    <a onclick="navigate('home')">Home</a>
+    <a onclick="navigate('search')">Search & Claim</a>
+    <a onclick="navigate('training')">Training</a>
+    <a onclick="navigate('careers')">Careers</a>
+    <a onclick="navigate('contacts')">Contacts</a>
   </nav>
 </header>
 
@@ -163,21 +164,15 @@ footer {
 <div class="container section active" id="home">
 <h1>Asset Vault BI</h1>
 
-<p>Asset Vault BI is a global platform dedicated to helping individuals and organizations identify, verify, and recover unclaimed funds from around the world. These funds may include dormant bank accounts, uncashed checks, insurance payouts, pensions, dividends, tax refunds, and other financial assets that have gone uncollected over time.</p>
-
-<p>Our team specializes in conducting comprehensive searches across multiple jurisdictions, leveraging global financial databases, public registries, and institutional records to trace assets that rightfully belong to you.</p>
+<p>Asset Vault BI is a global platform dedicated to helping individuals and organizations identify, verify, and recover unclaimed funds worldwide.</p>
 
 <ul class="icon-list">
 <li>Investigating dormant and lost financial records</li>
 <li>Matching individuals or businesses to rightful assets</li>
 <li>Assisting with legal documentation and verification</li>
-<li>Facilitating claims across different countries and legal systems</li>
-<li>Providing continuous monitoring for newly identified assets</li>
+<li>Facilitating international claims</li>
+<li>Continuous monitoring for new assets</li>
 </ul>
-
-<h3>Global Market Insight</h3>
-<p>Over 300 million unclaimed assets worldwide valued at more than $200 billion.</p>
-
 </div>
 
 <!-- SEARCH -->
@@ -185,12 +180,12 @@ footer {
 <div class="card">
 <h2>Check for Unclaimed Funds</h2>
 <form id="fundForm">
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="text" id="address" placeholder="Physical Address" required>
-<input type="email" id="email" placeholder="Email Address" required>
-<input type="tel" id="phone" placeholder="Phone Number" required>
-<input type="text" id="country" placeholder="Country" required>
-<textarea id="notes"></textarea>
+<input type="text" placeholder="Full Name" required>
+<input type="text" placeholder="Physical Address" required>
+<input type="email" placeholder="Email Address" required>
+<input type="tel" placeholder="Phone Number" required>
+<input type="text" placeholder="Country" required>
+<textarea placeholder="Additional Notes"></textarea>
 <button type="submit">Check Records</button>
 </form>
 <div id="status"></div>
@@ -200,34 +195,40 @@ footer {
 <!-- TRAINING -->
 <div class="container section" id="training">
 <h2>Asset Recovery Agent Training</h2>
-<p>Become an Asset Recovery Agent with Asset Vault BI...</p>
+
+<p>This training program equips individuals with the knowledge and practical skills required to identify, trace, and recover unclaimed financial assets globally.</p>
 
 <h3>What You Will Learn</h3>
 <ul class="icon-list">
-<li>Fundamentals of unclaimed funds</li>
-<li>Global asset searches</li>
-<li>Financial databases</li>
-<li>KYC processes</li>
-<li>Legal compliance</li>
-<li>Claims processing</li>
-<li>Ethics & confidentiality</li>
+<li>Understanding unclaimed assets and financial systems</li>
+<li>Advanced global asset search techniques</li>
+<li>Use of financial and public databases</li>
+<li>KYC and client verification procedures</li>
+<li>Legal frameworks across jurisdictions</li>
+<li>Claims preparation and submission</li>
+<li>Professional ethics and confidentiality</li>
 </ul>
 
-<h3>Contact</h3>
+<h3>Opportunities</h3>
+<p>Participants gain the ability to work independently or collaborate with institutions in asset tracing and recovery projects worldwide.</p>
+
+<h3>Contact for Enrollment</h3>
 <p>training@assetvaultbi.com</p>
 </div>
 
 <!-- CAREERS -->
 <div class="container section" id="careers">
 <h2>Careers</h2>
-<p>When we are hiring, opportunities will be posted here.</p>
+<p>Opportunities will be posted here as they become available.</p>
 </div>
 
 <!-- CONTACTS -->
 <div class="container section" id="contacts">
 <h2>Global Offices</h2>
 
-<p><b>Lesotho:</b> Maseru, 0100 | +26662722040 | compliance@assetvaultbi.com</p>
+<p><b>Lesotho:</b> Maseru | +266 6272 2040 | lesotho@assetvaultbi.com</p>
+<p><b>Botswana:</b> Gaborone CBD, Plot 1234 | +267 390 0000 | botswana@assetvaultbi.com</p>
+<p><b>South Africa:</b> Sandton, Johannesburg | +27 11 000 0000 | southafrica@assetvaultbi.com</p>
 <p><b>USA:</b> New York Office | +1 212 000 0000 | usa@assetvaultbi.com</p>
 <p><b>UK:</b> London Office | +44 20 0000 0000 | uk@assetvaultbi.com</p>
 <p><b>Canada:</b> Toronto Office | +1 416 000 0000 | canada@assetvaultbi.com</p>
@@ -239,7 +240,7 @@ footer {
 </div>
 
 <footer>
-© 2026 Asset Vault BI. All Rights Reserved | Unclaimed Funds Solutions and Recovery
+© 2026 Asset Vault BI. All Rights Reserved
 </footer>
 
 <script>
@@ -254,11 +255,15 @@ function toggleMenu(){
   document.getElementById("navMenu").classList.toggle("active");
 }
 
+/* FIX: CLOSE MENU AFTER CLICK */
+function navigate(section){
+  showSection(section);
+  document.getElementById("navMenu").classList.remove("active");
+}
+
 document.getElementById("fundForm").addEventListener("submit", function(e){
   e.preventDefault();
-
   document.getElementById("status").innerHTML = "Checking...";
-
   setTimeout(()=>{
     document.getElementById("status").innerHTML = "We will contact you shortly.";
   },2000);
