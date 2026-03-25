@@ -5,266 +5,263 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asset Vault BI</title>
 
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
 
 <style>
-/* Global Styles */
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  background: #ffffff; /* White background */
-  color: #0b1a2d; /* Navy text */
+  background: #ffffff;
+  color: #0b1a2d;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Header */
+/* HEADER */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff; /* White header */
+  background: #ffffff;
   padding: 15px 30px;
   border-bottom: 1px solid #0b1a2d;
-  color: #0b1a2d;
 }
 
 header img {
-  height: 200px; /* 4x size */
-  margin-right: 20px;
+  height: 200px;
+  cursor: pointer;
 }
 
+/* NAV */
 nav {
   display: flex;
-  gap: 25px;
+  gap: 20px;
 }
 
 nav a {
   color: #0b1a2d;
   font-weight: 600;
-  padding: 5px 10px;
-  transition: all 0.3s;
+  padding: 6px 10px;
 }
 
 nav a:hover {
   background: #0b1a2d;
-  color: gold;
+  color: #6b3e26; /* brown */
   border-radius: 5px;
 }
 
-/* Container */
+/* MOBILE MENU */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media(max-width: 768px){
+  nav {
+    display: none;
+    flex-direction: column;
+    background: #ffffff;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 200px;
+    border: 1px solid #ccc;
+  }
+  nav.active {
+    display: flex;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* CONTENT */
 .container {
+  flex: 1;
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
 }
 
-/* Card */
 .card {
-  background: #f9f9f9; /* Light card */
+  background: #f9f9f9;
   padding: 25px;
   border-radius: 10px;
-  margin-top: 20px;
   box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
 }
 
-/* Inputs */
-input, textarea, select, button {
+input, textarea, button {
   width: 100%;
   padding: 12px;
   margin-top: 10px;
   border-radius: 5px;
   border: 1px solid #0b1a2d;
-  font-size: 14px;
 }
 
 button {
-  background: #0b1a2d; /* Navy blue buttons */
-  color: gold;
+  background: #0b1a2d;
+  color: #6b3e26;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
 }
 
 button:hover {
-  background: gold;
-  color: #0b1a2d;
+  background: #6b3e26;
+  color: #fff;
 }
 
-/* Status */
-#status {
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  font-size: 12px;
-  padding: 20px;
-  background: #0b1a2d;
-  color: gold;
-  margin-top: 50px;
-}
-
-/* Hidden Sections */
-.section {
-  display: none;
-}
-.section.active {
-  display: block;
-}
-
-/* Numbered icons list */
+/* LIST */
 .icon-list {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
 }
 .icon-list li {
+  padding-left: 25px;
+  margin-bottom: 10px;
   position: relative;
-  padding-left: 30px;
-  margin-bottom: 12px;
 }
 .icon-list li::before {
   content: "•";
   position: absolute;
   left: 0;
-  color: #FFD700; /* Gold bullets */
-  font-weight: bold;
-  font-size: 20px;
+  color: #6b3e26;
+  font-size: 18px;
+}
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #0b1a2d;
+  color: #6b3e26;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Header -->
 <header>
-  <div style="display:flex; align-items:center;">
-    <img src="logo.png" alt="Asset Vault Logo">
-  </div>
-  <nav>
-    <a href="#" onclick="showSection('home')">Home</a>
-    <a href="#" onclick="showSection('search')">Search & Claim</a>
-    <a href="#" onclick="showSection('contacts')">Contacts</a>
+  <img src="logo.png" onclick="showSection('home')">
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <nav id="navMenu">
+    <a onclick="showSection('home')">Home</a>
+    <a onclick="showSection('search')">Search & Claim</a>
+    <a onclick="showSection('training')">Training</a>
+    <a onclick="showSection('careers')">Careers</a>
+    <a onclick="showSection('contacts')">Contacts</a>
   </nav>
 </header>
 
-<!-- Home Section -->
+<!-- HOME -->
 <div class="container section active" id="home">
-  <h1>Welcome to Asset Vault BI</h1>
-  <p>
-    Asset Vault BI is a global platform dedicated to helping individuals and organizations identify, verify, and recover unclaimed funds from around the world. These funds may include dormant bank accounts, uncashed checks, insurance payouts, pensions, dividends, tax refunds, and other financial assets that have gone uncollected over time.
-  </p>
-  <p>
-    Our team specializes in conducting comprehensive searches across multiple jurisdictions, leveraging global financial databases, public registries, and institutional records to trace assets that rightfully belong to you. We work closely with financial institutions, regulatory bodies, and government-held asset registries to ensure accurate identification and recovery.
-  </p>
-  <p>Asset recovery agents like Asset Vault BI play a critical role in:</p>
-  <ul class="icon-list">
-    <li>Investigating dormant and lost financial records</li>
-    <li>Matching individuals or businesses to rightful assets</li>
-    <li>Assisting with legal documentation and verification</li>
-    <li>Facilitating claims across different countries and legal systems</li>
-    <li>Providing continuous monitoring for newly identified assets</li>
-  </ul>
-  <p>
-    With a strong focus on confidentiality, compliance, and transparency, Asset Vault BI simplifies what is often a complex and time-consuming process, giving clients confidence and peace of mind.
-  </p>
-  <h3>Global Market Insight</h3>
-  <p>
-    The global unclaimed funds landscape is vast and continuously growing. Industry estimates suggest there are over 300 million unclaimed assets worldwide valued at more than $200 billion, with significant amounts held by governments and financial institutions across major economies.
-  </p>
-  <p>
-    This represents a massive pool of dormant wealth waiting to be reunited with its rightful owners, highlighting the importance of reliable recovery platforms like Asset Vault BI.
-  </p>
-  <p>
-    Start your journey today by navigating to the <strong>Search & Claim</strong> page to see if you have unclaimed funds.
-  </p>
+<h1>Asset Vault BI</h1>
+
+<p>Asset Vault BI is a global platform dedicated to helping individuals and organizations identify, verify, and recover unclaimed funds from around the world. These funds may include dormant bank accounts, uncashed checks, insurance payouts, pensions, dividends, tax refunds, and other financial assets that have gone uncollected over time.</p>
+
+<p>Our team specializes in conducting comprehensive searches across multiple jurisdictions, leveraging global financial databases, public registries, and institutional records to trace assets that rightfully belong to you.</p>
+
+<ul class="icon-list">
+<li>Investigating dormant and lost financial records</li>
+<li>Matching individuals or businesses to rightful assets</li>
+<li>Assisting with legal documentation and verification</li>
+<li>Facilitating claims across different countries and legal systems</li>
+<li>Providing continuous monitoring for newly identified assets</li>
+</ul>
+
+<h3>Global Market Insight</h3>
+<p>Over 300 million unclaimed assets worldwide valued at more than $200 billion.</p>
+
 </div>
 
-<!-- Search & Claim Section -->
+<!-- SEARCH -->
 <div class="container section" id="search">
-  <div class="card">
-    <h2>Check for Unclaimed Funds</h2>
-
-    <form id="fundForm">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="text" id="address" placeholder="Physical Address" required>
-      <input type="email" id="email" placeholder="Email Address" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="text" id="country" placeholder="Country" required>
-      <textarea id="notes" placeholder="Additional Info (Optional)"></textarea>
-      <button type="submit">Check Records</button>
-    </form>
-
-    <div id="status"></div>
-  </div>
+<div class="card">
+<h2>Check for Unclaimed Funds</h2>
+<form id="fundForm">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="text" id="address" placeholder="Physical Address" required>
+<input type="email" id="email" placeholder="Email Address" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<input type="text" id="country" placeholder="Country" required>
+<textarea id="notes"></textarea>
+<button type="submit">Check Records</button>
+</form>
+<div id="status"></div>
+</div>
 </div>
 
-<!-- Contacts Section -->
+<!-- TRAINING -->
+<div class="container section" id="training">
+<h2>Asset Recovery Agent Training</h2>
+<p>Become an Asset Recovery Agent with Asset Vault BI...</p>
+
+<h3>What You Will Learn</h3>
+<ul class="icon-list">
+<li>Fundamentals of unclaimed funds</li>
+<li>Global asset searches</li>
+<li>Financial databases</li>
+<li>KYC processes</li>
+<li>Legal compliance</li>
+<li>Claims processing</li>
+<li>Ethics & confidentiality</li>
+</ul>
+
+<h3>Contact</h3>
+<p>training@assetvaultbi.com</p>
+</div>
+
+<!-- CAREERS -->
+<div class="container section" id="careers">
+<h2>Careers</h2>
+<p>When we are hiring, opportunities will be posted here.</p>
+</div>
+
+<!-- CONTACTS -->
 <div class="container section" id="contacts">
-  <h2>Contact Us</h2>
-  <p>Address: Maseru, 0100, Lesotho</p>
-  <p>Phone: +266 62722040</p>
-  <p>Email: <strong>compliance@assetvaultbi.com</strong></p>
+<h2>Global Offices</h2>
+
+<p><b>Lesotho:</b> Maseru, 0100 | +26662722040 | compliance@assetvaultbi.com</p>
+<p><b>USA:</b> New York Office | +1 212 000 0000 | usa@assetvaultbi.com</p>
+<p><b>UK:</b> London Office | +44 20 0000 0000 | uk@assetvaultbi.com</p>
+<p><b>Canada:</b> Toronto Office | +1 416 000 0000 | canada@assetvaultbi.com</p>
+<p><b>Australia:</b> Sydney Office | +61 2 0000 0000 | australia@assetvaultbi.com</p>
+<p><b>Germany:</b> Berlin Office | +49 30 000000 | germany@assetvaultbi.com</p>
+<p><b>France:</b> Paris Office | +33 1 000000 | france@assetvaultbi.com</p>
+<p><b>Netherlands:</b> Amsterdam Office | +31 20 000000 | netherlands@assetvaultbi.com</p>
+
 </div>
 
-<!-- Footer -->
 <footer>
-  © 2026 First Block Solutions Pty Ltd. All Rights Reserved | Unclaimed Funds Search Portal
+© 2026 Asset Vault BI. All Rights Reserved | Unclaimed Funds Solutions and Recovery
 </footer>
 
-<!-- Scripts -->
 <script>
 emailjs.init("YOUR_PUBLIC_KEY");
 
-// Navigation Function
-function showSection(sectionId){
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(sec => sec.classList.remove('active'));
-  document.getElementById(sectionId).classList.add('active');
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-// Form Submission
+function toggleMenu(){
+  document.getElementById("navMenu").classList.toggle("active");
+}
+
 document.getElementById("fundForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const address = document.getElementById("address").value;
-  const phone = document.getElementById("phone").value;
-  const country = document.getElementById("country").value;
+  document.getElementById("status").innerHTML = "Checking...";
 
-  document.getElementById("status").innerHTML = "🔍 Checking global records...";
-
-  // Simulated search logic
-  const found = Math.random() > 0.5;
-
-  setTimeout(() => {
-    if(found){
-      document.getElementById("status").innerHTML = "✅ Potential match found! Our compliance team will contact you.";
-    } else {
-      document.getElementById("status").innerHTML = "❌ No immediate match found. We will keep monitoring.";
-    }
-
-    // Send notification to compliance
-    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-      client_name: name,
-      client_email: email,
-      client_phone: phone,
-      client_address: address,
-      client_country: country,
-      message: found ? "Potential unclaimed funds match found." : "No match yet - lead stored."
-    });
-
-  }, 2000);
+  setTimeout(()=>{
+    document.getElementById("status").innerHTML = "We will contact you shortly.";
+  },2000);
 });
 </script>
 
