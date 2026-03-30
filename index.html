@@ -5,278 +5,1322 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asset Vault BI</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
 
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background: #ffffff;
-  color: #0b1a2d;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* ─── VARIABLES ─────────────────────────────────────────── */
+:root {
+  --navy:       #0b1a2d;
+  --navy-mid:   #122038;
+  --navy-light: #1a3050;
+  --gold:       #c89b6d;
+  --gold-light: #dbb98d;
+  --gold-pale:  #f0e0c8;
+  --cream:      #faf7f2;
+  --white:      #ffffff;
+  --text-muted: #6b7a8d;
+  --border:     rgba(200,155,109,0.25);
+  --shadow:     0 20px 60px rgba(11,26,45,0.12);
 }
 
-/* HEADER */
+/* ─── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--navy);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── ANIMATED BACKGROUND ───────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(200,155,109,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% 80%, rgba(11,26,45,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── NOISE TEXTURE ─────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ────────────────────────────────────────────── */
 header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  padding: 15px 30px;
-  border-bottom: 1px solid #0b1a2d;
+  padding: 0 48px;
+  height: 80px;
+  background: rgba(250,247,242,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s ease;
 }
 
-header img {
-  height: 200px;
-  cursor: pointer;
+header.scrolled {
+  box-shadow: 0 4px 30px rgba(11,26,45,0.10);
 }
 
-/* NAV */
-nav {
+.logo-wrap {
   display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-text span:first-child {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+}
+
+.logo-text span:last-child {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 2px;
+}
+
+/* ─── NAV ───────────────────────────────────────────────── */
+nav { display: flex; gap: 4px; align-items: center; }
+
+nav a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.25s, background 0.25s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 14px;
+  right: 14px;
+  height: 1.5px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover { color: var(--gold); }
+nav a:hover::after { transform: scaleX(1); }
+nav a.active-link { color: var(--gold); }
+nav a.active-link::after { transform: scaleX(1); }
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.menu-toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+  display: block;
+}
+
+/* ─── MAIN WRAPPER ──────────────────────────────────────── */
+main { position: relative; z-index: 1; }
+
+/* ─── SECTIONS ──────────────────────────────────────────── */
+.section { display: none; animation: fadeSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.section.active { display: block; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── HOME ──────────────────────────────────────────────── */
+.hero {
+  min-height: calc(100vh - 80px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  overflow: hidden;
+}
+
+.hero-left {
+  padding: 80px 64px 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s 0.1s ease both;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 6vw, 82px);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--navy);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s 0.2s ease both;
+}
+
+.hero-heading em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-body {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: #3a4a5c;
+  max-width: 440px;
+  margin-bottom: 44px;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s 0.3s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s 0.4s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy);
+  color: var(--gold);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary:hover { color: var(--navy); box-shadow: 0 8px 28px rgba(200,155,109,0.35); }
+.btn-primary span { position: relative; z-index: 1; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 16px 24px;
+  border-radius: 4px;
+  border: 1.5px solid var(--navy);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  background: var(--navy);
+  color: var(--gold);
+}
+
+.hero-right {
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 70% at 60% 40%, rgba(200,155,109,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 20% 80%, rgba(200,155,109,0.08) 0%, transparent 60%);
+}
+
+.globe-wrap {
+  position: relative;
+  width: 380px;
+  height: 380px;
+  opacity: 0;
+  animation: fadeSlideUp 0.8s 0.5s ease both;
+}
+
+.globe-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(200,155,109,0.2);
+}
+
+.globe-ring:nth-child(1) { inset: 0; animation: spin 40s linear infinite; }
+.globe-ring:nth-child(2) { inset: 30px; border-color: rgba(200,155,109,0.15); animation: spin 30s linear infinite reverse; }
+.globe-ring:nth-child(3) { inset: 70px; border-color: rgba(200,155,109,0.25); animation: spin 20s linear infinite; border-style: dashed; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.globe-core {
+  position: absolute;
+  inset: 110px;
+  background: radial-gradient(circle at 35% 35%, rgba(200,155,109,0.3), rgba(200,155,109,0.05) 60%, transparent);
+  border: 1px solid rgba(200,155,109,0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.globe-core-inner {
+  width: 60px;
+  height: 60px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0.15;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50%       { transform: scale(1.15); opacity: 0.3; }
+}
+
+.stat-pills {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.stat-pill {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200,155,109,0.2);
+  border-radius: 100px;
+  padding: 10px 20px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease both;
+}
+
+.stat-pill:nth-child(1) { animation-delay: 0.7s; }
+.stat-pill:nth-child(2) { animation-delay: 0.85s; }
+
+.stat-pill strong {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.stat-pill small {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(200,155,109,0.6);
+}
+
+/* ─── FEATURES STRIP ────────────────────────────────────── */
+.features-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.feature-item {
+  padding: 48px 40px;
+  border-right: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.feature-item:last-child { border-right: none; }
+
+.feature-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-item:nth-child(2) { transition-delay: 0.1s; }
+.feature-item:nth-child(3) { transition-delay: 0.2s; }
+
+.feature-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--gold);
+  opacity: 0.35;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.feature-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ─── PAGE HEADER ───────────────────────────────────────── */
+.page-header {
+  background: var(--navy);
+  padding: 72px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(200,155,109,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.page-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 0.1s ease both;
+}
+
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 0.2s ease both;
+}
+
+.page-title em { font-style: italic; color: var(--gold-light); }
+
+.page-subtitle {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  margin-top: 14px;
+  max-width: 540px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 0.3s ease both;
+}
+
+/* ─── CONTENT AREAS ─────────────────────────────────────── */
+.content-wrap {
+  padding: 72px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ─── SEARCH / FORM ─────────────────────────────────────── */
+.form-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow), 0 0 0 1px var(--border);
+  padding: 56px;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+  background-size: 200%;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full { grid-column: 1 / -1; }
+
+.form-group label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid rgba(11,26,45,0.15);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--navy);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--gold);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(200,155,109,0.12);
+}
+
+.form-group textarea { resize: vertical; min-height: 100px; }
+
+.form-submit-wrap { margin-top: 24px; }
+
+.form-submit-wrap .btn-primary {
+  width: 100%;
+  justify-content: center;
+  padding: 18px;
+  font-size: 12px;
+}
+
+.status-msg {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: none;
+}
+
+.status-msg.show { display: block; }
+.status-msg.success {
+  background: rgba(200,155,109,0.1);
+  border: 1px solid rgba(200,155,109,0.3);
+  color: #6b4e24;
+}
+
+/* ─── TRAINING ──────────────────────────────────────────── */
+.training-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 0;
+}
+
+.training-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 36px;
+  box-shadow: 0 4px 24px rgba(11,26,45,0.06);
+  border: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s;
+}
+
+.training-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.training-card:hover {
+  box-shadow: 0 8px 40px rgba(11,26,45,0.12);
+  border-color: rgba(200,155,109,0.45);
+}
+
+.training-card:nth-child(2) { transition-delay: 0.1s; }
+.training-card:nth-child(3) { transition-delay: 0.2s; }
+.training-card:nth-child(4) { transition-delay: 0.3s; }
+
+.tc-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(200,155,109,0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.tc-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.tc-body {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.training-cta {
+  margin-top: 40px;
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.training-cta-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.training-cta-text p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+.training-cta a {
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(200,155,109,0.4);
+  padding-bottom: 2px;
+  transition: border-color 0.25s, color 0.25s;
+}
+
+.training-cta a:hover { color: var(--gold-light); border-color: var(--gold-light); }
+
+/* ─── CONTACTS ──────────────────────────────────────────── */
+.offices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
-nav a {
-  color: #0b1a2d;
-  font-weight: 600;
-  padding: 6px 10px;
-  cursor: pointer;
+.office-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 28px 30px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s, border-color 0.3s, transform 0.25s;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s, border-color 0.3s;
 }
 
-nav a:hover {
-  background: #0b1a2d;
-  color: #c89b6d;
-  border-radius: 5px;
+.office-card.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* MOBILE MENU */
-.menu-toggle {
-  display: none;
-  font-size: 24px;
-  cursor: pointer;
+.office-card:hover {
+  box-shadow: var(--shadow);
+  border-color: rgba(200,155,109,0.4);
 }
 
-@media(max-width: 768px){
-  nav {
-    display: none;
-    flex-direction: column;
-    background: #ffffff;
-    position: absolute;
-    top: 80px;
-    right: 20px;
-    width: 200px;
-    border: 1px solid #ccc;
-  }
-  nav.active {
-    display: flex;
-  }
-  .menu-toggle {
-    display: block;
-  }
+.office-card:nth-child(2) { transition-delay: 0.05s; }
+.office-card:nth-child(3) { transition-delay: 0.10s; }
+.office-card:nth-child(4) { transition-delay: 0.15s; }
+.office-card:nth-child(5) { transition-delay: 0.20s; }
+.office-card:nth-child(6) { transition-delay: 0.25s; }
+.office-card:nth-child(7) { transition-delay: 0.30s; }
+.office-card:nth-child(8) { transition-delay: 0.35s; }
+.office-card:nth-child(9) { transition-delay: 0.40s; }
+.office-card:nth-child(10){ transition-delay: 0.45s; }
+
+.office-country {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
 }
 
-/* CONTENT */
-.container {
-  flex: 1;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
+.office-city {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--navy);
+  margin-bottom: 14px;
 }
 
-.card {
-  background: #f9f9f9;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+.office-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
 }
 
-input, textarea, button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 5px;
-  border: 1px solid #0b1a2d;
+.office-detail svg {
+  flex-shrink: 0;
+  color: var(--gold);
+  opacity: 0.7;
 }
 
-button {
-  background: #0b1a2d;
-  color: #c89b6d;
-  font-weight: bold;
-  cursor: pointer;
+.office-detail a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-button:hover {
-  background: #c89b6d;
-  color: #fff;
+.office-detail a:hover { color: var(--gold); }
+
+/* ─── CAREERS ───────────────────────────────────────────── */
+.careers-empty {
+  text-align: center;
+  padding: 80px 40px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-/* LIST */
-.icon-list {
-  list-style: none;
-  padding: 0;
+.careers-empty svg {
+  opacity: 0.25;
+  margin-bottom: 24px;
 }
-.icon-list li {
-  padding-left: 25px;
-  margin-bottom: 10px;
+
+.careers-empty h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+.careers-empty p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ─── FOOTER ────────────────────────────────────────────── */
+footer {
+  background: var(--navy);
+  padding: 32px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
   position: relative;
 }
-.icon-list li::before {
-  content: "•";
+
+footer::before {
+  content: '';
   position: absolute;
+  top: 0;
   left: 0;
-  color: #c89b6d;
-  font-size: 18px;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,155,109,0.5), transparent);
 }
 
-/* SECTIONS */
-.section { display: none; }
-.section.active { display: block; }
+.footer-copy {
+  font-size: 11px;
+  color: rgba(200,155,109,0.5);
+  letter-spacing: 0.08em;
+}
 
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 15px;
-  background: #0b1a2d;
-  color: #c89b6d;
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(200,155,109,0.4);
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+/* ─── SCROLL PROGRESS BAR ───────────────────────────────── */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0%;
+  z-index: 200;
+  transition: width 0.1s linear;
+}
+
+/* ─── MOBILE ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  header { padding: 0 24px; }
+
+  nav {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: rgba(250,247,242,0.97);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 20px 24px 32px;
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    gap: 2px;
+  }
+
+  nav.open { display: flex; }
+
+  nav a { padding: 12px 16px; font-size: 12px; }
+
+  .menu-toggle { display: flex; }
+
+  .hero { grid-template-columns: 1fr; }
+
+  .hero-right { min-height: 260px; }
+
+  .hero-left { padding: 48px 24px; }
+
+  .features-strip { grid-template-columns: 1fr; }
+
+  .feature-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .feature-item:last-child { border-bottom: none; }
+
+  .page-header { padding: 48px 24px; }
+
+  .content-wrap { padding: 40px 24px; }
+
+  .form-card { padding: 32px 24px; }
+
+  .form-grid { grid-template-columns: 1fr; }
+
+  .training-grid { grid-template-columns: 1fr; }
+
+  .training-cta { flex-direction: column; }
+
+  footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+
+  .globe-wrap { width: 220px; height: 220px; }
+  .globe-core { inset: 60px; }
 }
 </style>
 </head>
-
 <body>
 
-<header>
-  <img src="logo.png" onclick="showSection('home')">
-  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="logo-wrap" onclick="navigate('home')">
+    <div class="logo-icon">
+      <!-- Vault / Shield icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="#c89b6d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.5C16.5 22.15 20 17.25 20 12V6L12 2z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Asset Vault</span>
+      <span>Business Intelligence</span>
+    </div>
+  </div>
+
+  <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+
   <nav id="navMenu">
-    <a onclick="navigate('home')">Home</a>
-    <a onclick="navigate('search')">Search & Claim</a>
-    <a onclick="navigate('training')">Training</a>
-    <a onclick="navigate('careers')">Careers</a>
-    <a onclick="navigate('contacts')">Contacts</a>
+    <a onclick="navigate('home')" class="active-link" data-section="home">Home</a>
+    <a onclick="navigate('search')" data-section="search">Search & Claim</a>
+    <a onclick="navigate('training')" data-section="training">Training</a>
+    <a onclick="navigate('careers')" data-section="careers">Careers</a>
+    <a onclick="navigate('contacts')" data-section="contacts">Contacts</a>
   </nav>
 </header>
 
-<!-- HOME -->
-<div class="container section active" id="home">
-<h1>Asset Vault BI</h1>
+<main>
 
-<p>
-Asset Vault BI is a global Business Intelligence (BI) platform that helps individuals and organizations identify, verify, and recover unclaimed funds worldwide, including dormant accounts, uncashed checks, insurance payouts, pensions, dividends, and other overlooked financial assets.
-</p>
+<!-- ──────── HOME ──────── -->
+<div class="section active" id="home">
 
-<p>
-We conduct searches across multiple jurisdictions using financial databases, public records, and institutional registries to trace funds that rightfully belong to you. Our team supports the entire process, from identification and verification to documentation and claim facilitation across different legal systems.
-</p>
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Global Asset Recovery</div>
+      <h1 class="hero-heading">
+        Recover What<br>is <em>Rightfully</em><br>Yours
+      </h1>
+      <p class="hero-body">
+        Asset Vault BI is a global Business Intelligence platform that helps individuals and organisations identify, verify, and recover unclaimed financial assets across multiple jurisdictions worldwide.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="navigate('search')"><span>Begin Your Search</span></button>
+        <button class="btn-ghost" onclick="navigate('training')">Our Training</button>
+      </div>
+    </div>
 
-<p>
-With a strong focus on confidentiality, compliance, and transparency, Asset Vault BI simplifies what is often a complex process, giving clients confidence and peace of mind.
-</p>
+    <div class="hero-right">
+      <div class="globe-wrap">
+        <div class="globe-ring"></div>
+        <div class="globe-ring"></div>
+        <div class="globe-ring"></div>
+        <div class="globe-core"><div class="globe-core-inner"></div></div>
+      </div>
+      <div class="stat-pills">
+        <div class="stat-pill">
+          <strong>300M+</strong>
+          <small>Unclaimed Assets</small>
+        </div>
+        <div class="stat-pill">
+          <strong>$200B+</strong>
+          <small>Estimated Value</small>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3>Global Market Insight</h3>
-
-<p>
-There are an estimated 300+ million unclaimed assets globally valued at over $200 billion, held by governments and financial institutions, representing a vast pool of dormant wealth waiting to be reclaimed.
-</p>
-
-</div>
-
-<!-- SEARCH -->
-<div class="container section" id="search">
-<div class="card">
-<h2>Check for Unclaimed Funds</h2>
-<form id="fundForm">
-<input type="text" placeholder="Full Name" required>
-<input type="text" placeholder="Physical Address" required>
-<input type="email" placeholder="Email Address" required>
-<input type="tel" placeholder="Phone Number" required>
-<input type="text" placeholder="Country" required>
-<textarea placeholder="Additional Notes"></textarea>
-<button type="submit">Check Records</button>
-</form>
-<div id="status"></div>
-</div>
-</div>
-
-<!-- TRAINING -->
-<div class="container section" id="training">
-<h2>Asset Recovery Agent Training</h2>
-
-<p>This training program equips individuals with the knowledge and practical skills required to identify, trace, and recover unclaimed financial assets globally.</p>
-
-<h3>What You Will Learn</h3>
-<ul class="icon-list">
-<li>Understanding unclaimed assets and financial systems</li>
-<li>Advanced global asset search techniques</li>
-<li>Use of financial and public databases</li>
-<li>KYC and client verification procedures</li>
-<li>Legal frameworks across jurisdictions</li>
-<li>Claims preparation and submission</li>
-<li>Professional ethics and confidentiality</li>
-</ul>
-
-<h3>Opportunities</h3>
-<p>Participants gain the ability to work independently or collaborate with institutions in asset tracing and recovery projects worldwide.</p>
-
-<h3>Contact for Enrollment</h3>
-<p>training@assetvaultbi.com</p>
-</div>
-
-<!-- CAREERS -->
-<div class="container section" id="careers">
-<h2>Careers</h2>
-<p>Opportunities will be posted here as they become available.</p>
-</div>
-
-<!-- CONTACTS -->
-<div class="container section" id="contacts">
-<h2>Global Offices</h2>
-
-<p><b>Lesotho:</b> Maseru | +266 6272 2040 | lesotho@assetvaultbi.com</p>
-<p><b>Botswana:</b> Gaborone CBD, Plot 1234 | +267 390 0000 | botswana@assetvaultbi.com</p>
-<p><b>South Africa:</b> Sandton, Johannesburg | +27 11 000 0000 | southafrica@assetvaultbi.com</p>
-<p><b>USA:</b> New York Office | +1 212 000 0000 | usa@assetvaultbi.com</p>
-<p><b>UK:</b> London Office | +44 20 0000 0000 | uk@assetvaultbi.com</p>
-<p><b>Canada:</b> Toronto Office | +1 416 000 0000 | canada@assetvaultbi.com</p>
-<p><b>Australia:</b> Sydney Office | +61 2 0000 0000 | australia@assetvaultbi.com</p>
-<p><b>Germany:</b> Berlin Office | +49 30 000000 | germany@assetvaultbi.com</p>
-<p><b>France:</b> Paris Office | +33 1 000000 | france@assetvaultbi.com</p>
-<p><b>Netherlands:</b> Amsterdam Office | +31 20 000000 | netherlands@assetvaultbi.com</p>
+  <div class="features-strip">
+    <div class="feature-item">
+      <div class="feature-num">01</div>
+      <div class="feature-title">Global Search</div>
+      <div class="feature-desc">We search across financial databases, public records, and institutional registries in multiple jurisdictions to locate dormant assets.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">02</div>
+      <div class="feature-title">Verification & Compliance</div>
+      <div class="feature-desc">Full KYC compliance and rigorous verification ensures every claim meets the legal standards of its jurisdiction.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">03</div>
+      <div class="feature-title">Claim Facilitation</div>
+      <div class="feature-desc">Our team supports documentation, submission, and follow-through so you recover assets with confidence and peace of mind.</div>
+    </div>
+  </div>
 
 </div>
+
+<!-- ──────── SEARCH ──────── -->
+<div class="section" id="search">
+  <div class="page-header">
+    <div class="page-tag">Asset Recovery</div>
+    <h2 class="page-title">Search &amp; <em>Claim</em></h2>
+    <p class="page-subtitle">Submit your details and our specialists will search global databases for assets that may rightfully belong to you.</p>
+  </div>
+
+  <div class="content-wrap">
+    <div class="form-card">
+      <div class="form-grid" id="fundForm">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="firstName" placeholder="John" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lastName" placeholder="Doe" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="emailAddr" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phoneNum" placeholder="+1 000 000 0000" required>
+        </div>
+        <div class="form-group full">
+          <label>Physical Address</label>
+          <input type="text" id="physAddr" placeholder="Street, City, Province" required>
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" id="country" placeholder="Country of residence" required>
+        </div>
+        <div class="form-group">
+          <label>Asset Type (if known)</label>
+          <input type="text" id="assetType" placeholder="e.g. Pension, Dormant Account">
+        </div>
+        <div class="form-group full">
+          <label>Additional Notes</label>
+          <textarea id="notes" placeholder="Any details that may assist our search…"></textarea>
+        </div>
+      </div>
+
+      <div class="form-submit-wrap">
+        <button class="btn-primary" onclick="submitForm()"><span>Submit &amp; Check Records</span></button>
+      </div>
+
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────── TRAINING ──────── -->
+<div class="section" id="training">
+  <div class="page-header">
+    <div class="page-tag">Professional Development</div>
+    <h2 class="page-title">Agent <em>Training</em></h2>
+    <p class="page-subtitle">Equip yourself with the knowledge and practical skills to identify, trace, and recover unclaimed financial assets globally.</p>
+  </div>
+
+  <div class="content-wrap">
+    <div class="training-grid">
+      <div class="training-card">
+        <div class="tc-icon">🔍</div>
+        <div class="tc-title">Asset Identification</div>
+        <div class="tc-body">Learn to recognise and categorise unclaimed assets including dormant accounts, uncashed cheques, insurance payouts, pensions, and dividends across different financial systems.</div>
+      </div>
+      <div class="training-card">
+        <div class="tc-icon">🗄️</div>
+        <div class="tc-title">Database & Search Techniques</div>
+        <div class="tc-body">Master advanced global asset search methods using financial databases, public records, and institutional registries across multiple jurisdictions.</div>
+      </div>
+      <div class="training-card">
+        <div class="tc-icon">⚖️</div>
+        <div class="tc-title">Legal Frameworks</div>
+        <div class="tc-body">Understand KYC and client verification procedures alongside the legal requirements for claims preparation and submission in different legal systems worldwide.</div>
+      </div>
+      <div class="training-card">
+        <div class="tc-icon">🤝</div>
+        <div class="tc-title">Ethics & Confidentiality</div>
+        <div class="tc-body">Build a career on professional ethics, data confidentiality, and transparent client communication — the hallmarks of a trusted asset recovery specialist.</div>
+      </div>
+    </div>
+
+    <div class="training-cta">
+      <div class="training-cta-text">
+        <h3>Ready to Enrol?</h3>
+        <p>Contact our training team to discuss intake dates and programme details.</p>
+      </div>
+      <a href="mailto:training@assetvaultbi.com">training@assetvaultbi.com →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ──────── CAREERS ──────── -->
+<div class="section" id="careers">
+  <div class="page-header">
+    <div class="page-tag">Join the Team</div>
+    <h2 class="page-title"><em>Careers</em></h2>
+    <p class="page-subtitle">Be part of a global team dedicated to restoring financial assets to their rightful owners.</p>
+  </div>
+
+  <div class="content-wrap">
+    <div class="careers-empty">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="20" width="48" height="36" rx="4" stroke="#0b1a2d" stroke-width="2"/>
+        <path d="M22 20V16a10 10 0 0 1 20 0v4" stroke="#0b1a2d" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="32" cy="36" r="4" stroke="#c89b6d" stroke-width="2"/>
+        <path d="M32 40v4" stroke="#c89b6d" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h3>No Open Positions</h3>
+      <p>We don't have any vacancies at the moment, but we're always growing. Check back soon or send a speculative application to <a href="mailto:lesotho@assetvaultbi.com" style="color:var(--gold); text-decoration:none;">lesotho@assetvaultbi.com</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ──────── CONTACTS ──────── -->
+<div class="section" id="contacts">
+  <div class="page-header">
+    <div class="page-tag">Our Offices</div>
+    <h2 class="page-title">Global <em>Offices</em></h2>
+    <p class="page-subtitle">Asset Vault BI operates in key financial centres worldwide. Reach out to the office nearest you.</p>
+  </div>
+
+  <div class="content-wrap">
+    <div class="offices-grid" id="officesGrid">
+    </div>
+  </div>
+</div>
+
+</main>
 
 <footer>
-© 2026 Asset Vault BI. All Rights Reserved
+  <div class="footer-copy">© 2026 Asset Vault BI. All Rights Reserved.</div>
+  <div class="footer-links">
+    <a onclick="navigate('home')">Home</a>
+    <a onclick="navigate('search')">Search</a>
+    <a onclick="navigate('contacts')">Contact</a>
+  </div>
 </footer>
 
 <script>
-emailjs.init("YOUR_PUBLIC_KEY");
+/* ── DATA ──────────────────────────────────────────────── */
+const offices = [
+  { country:"Lesotho",     city:"Maseru",      phone:"+266 6272 2040", email:"lesotho@assetvaultbi.com" },
+  { country:"Botswana",    city:"Gaborone",    phone:"+267 390 0000",  email:"botswana@assetvaultbi.com" },
+  { country:"South Africa",city:"Johannesburg",phone:"+27 11 000 0000",email:"southafrica@assetvaultbi.com" },
+  { country:"USA",         city:"New York",    phone:"+1 212 000 0000",email:"usa@assetvaultbi.com" },
+  { country:"UK",          city:"London",      phone:"+44 20 0000 0000",email:"uk@assetvaultbi.com" },
+  { country:"Canada",      city:"Toronto",     phone:"+1 416 000 0000",email:"canada@assetvaultbi.com" },
+  { country:"Australia",   city:"Sydney",      phone:"+61 2 0000 0000",email:"australia@assetvaultbi.com" },
+  { country:"Germany",     city:"Berlin",      phone:"+49 30 000000",  email:"germany@assetvaultbi.com" },
+  { country:"France",      city:"Paris",       phone:"+33 1 000000",   email:"france@assetvaultbi.com" },
+  { country:"Netherlands", city:"Amsterdam",   phone:"+31 20 000000",  email:"netherlands@assetvaultbi.com" },
+];
 
-function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+const phoneIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 9.81a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+const mailIcon  = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2 4 12 13 22 4"/></svg>`;
+
+function buildOffices() {
+  const grid = document.getElementById('officesGrid');
+  offices.forEach(o => {
+    grid.innerHTML += `
+      <div class="office-card">
+        <div class="office-country">${o.country}</div>
+        <div class="office-city">${o.city}</div>
+        <div class="office-detail">${phoneIcon} ${o.phone}</div>
+        <div class="office-detail">${mailIcon} <a href="mailto:${o.email}">${o.email}</a></div>
+      </div>`;
+  });
 }
 
-function toggleMenu(){
-  document.getElementById("navMenu").classList.toggle("active");
+buildOffices();
+
+/* ── NAVIGATION ────────────────────────────────────────── */
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => {
+    s.classList.remove('active');
+    s.style.animation = 'none';
+  });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.style.animation = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.toggle('active-link', a.dataset.section === id);
+  });
+
+  setTimeout(() => revealOnScroll(), 100);
 }
 
-function navigate(section){
+function navigate(section) {
   showSection(section);
-  document.getElementById("navMenu").classList.remove("active");
+  document.getElementById('navMenu').classList.remove('open');
+  // animate hamburger back
+  document.getElementById('menuToggle').classList.remove('open');
 }
 
-document.getElementById("fundForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  document.getElementById("status").innerHTML = "Checking...";
-  setTimeout(()=>{
-    document.getElementById("status").innerHTML = "We will contact you shortly.";
-  },2000);
-});
-</script>
+function toggleMenu() {
+  document.getElementById('navMenu').classList.toggle('open');
+  document.getElementById('menuToggle').classList.toggle('open');
+}
 
+/* ── FORM SUBMIT ───────────────────────────────────────── */
+function submitForm() {
+  const fields = ['firstName','lastName','emailAddr','phoneNum','physAddr','country'];
+  let valid = true;
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#e05a5a';
+      valid = false;
+    } else {
+      el.style.borderColor = '';
+    }
+  });
+
+  if (!valid) {
+    showStatus('Please fill in all required fields.', false);
+    return;
+  }
+
+  const btn = document.querySelector('#search .btn-primary span');
+  btn.textContent = 'Submitting…';
+
+  setTimeout(() => {
+    btn.textContent = 'Submit & Check Records';
+    showStatus('Thank you — we have received your request and will contact you shortly.', true);
+  }, 2200);
+}
+
+function showStatus(msg, success) {
+  const el = document.getElementById('statusMsg');
+  el.textContent = msg;
+  el.className = 'status-msg show' + (success ? ' success' : '');
+}
+
+/* ── SCROLL PROGRESS ───────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  // sticky header shadow
+  document.getElementById('siteHeader').classList.toggle('scrolled', scrollTop > 10);
+
+  revealOnScroll();
+});
+
+/* ── SCROLL REVEAL ─────────────────────────────────────── */
+function revealOnScroll() {
+  document.querySelectorAll('.feature-item, .training-card, .office-card').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) el.classList.add('visible');
+  });
+}
+
+// Trigger once on load
+setTimeout(revealOnScroll, 300);
+</script>
 </body>
 </html>
