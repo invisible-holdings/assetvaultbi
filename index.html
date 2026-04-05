@@ -617,7 +617,7 @@ footer::before {
 <script>
 // ── PRELOADER CONFIGURATION ───────────────────────────────────
 var PRELOADER_ENABLED  = true;   // set false to skip entirely
-var PRELOADER_DURATION = 4200;   // total animation time in ms
+var PRELOADER_DURATION = 6000;   // total animation time in ms
 // ─────────────────────────────────────────────────────────────
 (function(){
   if (!PRELOADER_ENABLED) {
@@ -634,13 +634,13 @@ var PRELOADER_DURATION = 4200;   // total animation time in ms
     setTimeout(function(){ p.classList.add('gone'); }, 750);
   }
   var PHASES = [
-    { pct:0,   msg:'Initialising…',       delay:0   },
-    { pct:18,  msg:'Verifying identity…', delay:400 },
-    { pct:35,  msg:'Accessing records…',  delay:600 },
-    { pct:52,  msg:'Unlocking vault…',    delay:600 },
-    { pct:70,  msg:'Retracting bolts…',   delay:500 },
-    { pct:85,  msg:'Opening door…',       delay:500 },
-    { pct:100, msg:'Vault open.',          delay:800 },
+    { pct:0,   msg:'Initialising…',       delay:0    },
+    { pct:18,  msg:'Verifying identity…', delay:600  },
+    { pct:35,  msg:'Accessing records…',  delay:900  },
+    { pct:52,  msg:'Unlocking vault…',    delay:900  },
+    { pct:70,  msg:'Retracting bolts…',   delay:800  },
+    { pct:85,  msg:'Opening door…',       delay:800  },
+    { pct:100, msg:'Vault open.',          delay:1000 },
   ];
   var elapsed = 0;
   PHASES.forEach(function(ph, i){
@@ -676,10 +676,10 @@ var PRELOADER_DURATION = 4200;   // total animation time in ms
       }
     }, elapsed));
   });
-  var fallback = setTimeout(dismissPreloader, PRELOADER_DURATION + 800);
+  var fallback = setTimeout(dismissPreloader, PRELOADER_DURATION + 1000);
   window.addEventListener('load', function(){
     clearTimeout(fallback);
-    t.push(setTimeout(dismissPreloader, 600));
+    t.push(setTimeout(dismissPreloader, 6000));
   });
 })();
 </script>
@@ -870,7 +870,7 @@ var PRELOADER_DURATION = 4200;   // total animation time in ms
         <h3>Ready to Enrol?</h3>
         <p>Contact our training team to discuss intake dates and programme details.</p>
       </div>
-      <a href="mailto:training@assetvaultbi.com">training@assetvaultbi.com →</a>
+      <a href="/cdn-cgi/l/email-protection#2d595f4c444344434a6d4c5e5e48595b4c5841594f44034e4240"><span class="__cf_email__" data-cfemail="ef9b9d8e8681868188af8e9c9c8a9b998e9a839b8d86c18c8082">[email&#160;protected]</span> →</a>
     </div>
   </div>
 </div>
@@ -894,7 +894,7 @@ var PRELOADER_DURATION = 4200;   // total animation time in ms
       <p>
         We don't have any vacancies at the moment, but we're always growing.
         Check back soon or send a speculative application to<br><br>
-        <a href="mailto:careers@assetvaultbi.com">careers@assetvaultbi.com</a>
+        <a href="/cdn-cgi/l/email-protection#54373526313126271435272731202235213820363d7a373b39"><span class="__cf_email__" data-cfemail="a3c0c2d1c6c6d1d0e3c2d0d0c6d7d5c2d6cfd7c1ca8dc0ccce">[email&#160;protected]</span></a>
       </p>
     </div>
   </div>
@@ -924,7 +924,7 @@ var PRELOADER_DURATION = 4200;   // total animation time in ms
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const offices = [
   { country:"Lesotho",      city:"Maseru",       phone:"+266 6272 2040",  email:"lesotho@assetvaultbi.com" },
   { country:"Botswana",     city:"Gaborone",     phone:"+267 390 0000",   email:"botswana@assetvaultbi.com" },
@@ -1004,18 +1004,3 @@ function revealOnScroll() {
   document.querySelectorAll('.feature-item, .training-card, .office-card').forEach(el => {
     if (el.getBoundingClientRect().top < window.innerHeight - 60)
       el.classList.add('visible');
-  });
-}
-
-window.addEventListener('scroll', () => {
-  const pct = document.body.scrollHeight - window.innerHeight;
-  document.getElementById('progressBar').style.width =
-    (pct > 0 ? (window.scrollY / pct) * 100 : 0) + '%';
-  document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 10);
-  revealOnScroll();
-});
-
-setTimeout(revealOnScroll, 300);
-</script>
-</body>
-</html>
